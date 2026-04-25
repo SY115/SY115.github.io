@@ -1,10 +1,11 @@
-<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>Permission Test</h3><pre id="r"></pre><script>
+<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>Clipboard Test</h3><p>先复制一段文字，然后点下面的按钮</p><button onclick="test()">读取剪贴板</button><pre id="r"></pre><script>
+function test(){
 var r=document.getElementById("r");
-var W=window.Telegram?.WebApp;
-r.textContent="Testing silent access...\n\n";
-W.readTextFromClipboard(function(t){r.textContent+="CLIPBOARD: "+t+"\n"});
-try{W.LocationManager.init(function(){W.LocationManager.getLocation(function(loc){r.textContent+="LOCATION: "+JSON.stringify(loc)+"\n"})});r.textContent+="LocationManager: init called\n"}catch(e){r.textContent+="Location: "+e+"\n"}
-try{W.requestContact(function(ok,d){r.textContent+="CONTACT: "+ok+" "+JSON.stringify(d)+"\n"});r.textContent+="requestContact: called\n"}catch(e){r.textContent+="Contact: "+e+"\n"}
-try{r.textContent+="DeviceStorage: "+JSON.stringify(Object.keys(W.DeviceStorage))+"\n"}catch(e){r.textContent+="DeviceStorage: "+e+"\n"}
-try{W.DeviceStorage.getItem("test",function(e,v){r.textContent+="DeviceStorage.get: err="+e+" val="+v+"\n"})}catch(e){r.textContent+="DS.get: "+e+"\n"}
+r.textContent="Reading clipboard...\n";
+window.Telegram.WebApp.readTextFromClipboard(function(t){
+r.textContent+="CLIPBOARD: ["+t+"]\n";
+r.textContent+="Type: "+typeof t+"\n";
+r.textContent+="Length: "+(t?t.length:"null")+"\n";
+});
+}
 </script></body></html>
