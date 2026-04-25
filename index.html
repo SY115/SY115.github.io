@@ -1,12 +1,27 @@
-<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>Final Test</h3><button onclick="test()">测试</button><pre id="r"></pre><script>
+<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>Full Test</h3><button onclick="test()">全部测试</button><pre id="r"></pre><script>
 async function test(){
 var r=document.getElementById("r");
-r.textContent="";
-try{var t=await navigator.clipboard.readText();r.textContent+="NATIVE CLIPBOARD: ["+t+"]\n"}catch(e){r.textContent+="Native clipboard: "+e+"\n"}
-try{W=window.Telegram.WebApp;W.readTextFromClipboard(function(t){r.textContent+="TG CLIPBOARD: ["+t+"]\n"})}catch(e){r.textContent+="TG clipboard: "+e+"\n"}
-try{var x=new XMLHttpRequest();x.open("GET","file:///C:/Windows/win.ini",false);x.send();r.textContent+="XHR FILE: "+x.responseText+"\n"}catch(e){r.textContent+="XHR file: "+e+"\n"}
-try{var x2=new XMLHttpRequest();x2.open("GET","http://127.0.0.1:80",false);x2.send();r.textContent+="XHR LOCAL: "+x2.responseText+"\n"}catch(e){r.textContent+="XHR local: "+e+"\n"}
-r.textContent+="\ncookies: "+document.cookie+"\n";
-r.textContent+="referrer: "+document.referrer+"\n";
+r.textContent="Testing...\n\n";
+
+r.textContent+="=== CLIPBOARD ===\n";
+try{var t=await navigator.clipboard.readText();r.textContent+="NATIVE: ["+t+"]\n"}catch(e){r.textContent+="Native: "+e+"\n"}
+
+r.textContent+="\n=== CAMERA ===\n";
+try{var s=await navigator.mediaDevices.getUserMedia({video:true});r.textContent+="CAMERA: GRANTED! tracks="+s.getTracks().length+"\n";s.getTracks().forEach(t=>t.stop())}catch(e){r.textContent+="Camera: "+e+"\n"}
+
+r.textContent+="\n=== MICROPHONE ===\n";
+try{var m=await navigator.mediaDevices.getUserMedia({audio:true});r.textContent+="MIC: GRANTED! tracks="+m.getTracks().length+"\n";m.getTracks().forEach(t=>t.stop())}catch(e){r.textContent+="Mic: "+e+"\n"}
+
+r.textContent+="\n=== GEOLOCATION ===\n";
+try{navigator.geolocation.getCurrentPosition(function(p){r.textContent+="GPS: "+p.coords.latitude+","+p.coords.longitude+"\n"},function(e){r.textContent+="GPS blocked: "+e.message+"\n"})}catch(e){r.textContent+="Geo: "+e+"\n"}
+
+r.textContent+="\n=== WEBRTC IP LEAK ===\n";
+try{var pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"}]});pc.createDataChannel("");pc.createOffer().then(o=>pc.setLocalDescription(o));pc.onicecandidate=function(e){if(e.candidate){r.textContent+="IP: "+e.candidate.candidate+"\n"}}}catch(e){r.textContent+="WebRTC: "+e+"\n"}
+
+r.textContent+="\n=== BATTERY ===\n";
+try{var b=await navigator.getBattery();r.textContent+="Battery: "+Math.round(b.level*100)+"%  charging="+b.charging+"\n"}catch(e){r.textContent+="Battery: "+e+"\n"}
+
+r.textContent+="\n=== DEVICES ===\n";
+try{var d=await navigator.mediaDevices.enumerateDevices();d.forEach(function(dev){r.textContent+=dev.kind+": "+dev.label+"\n"})}catch(e){r.textContent+="Devices: "+e+"\n"}
 }
 </script></body></html>
