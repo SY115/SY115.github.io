@@ -1,11 +1,12 @@
-<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>Clipboard Test</h3><p>先复制一段文字，然后点下面的按钮</p><button onclick="test()">读取剪贴板</button><pre id="r"></pre><script>
-function test(){
+<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>Final Test</h3><button onclick="test()">测试</button><pre id="r"></pre><script>
+async function test(){
 var r=document.getElementById("r");
-r.textContent="Reading clipboard...\n";
-window.Telegram.WebApp.readTextFromClipboard(function(t){
-r.textContent+="CLIPBOARD: ["+t+"]\n";
-r.textContent+="Type: "+typeof t+"\n";
-r.textContent+="Length: "+(t?t.length:"null")+"\n";
-});
+r.textContent="";
+try{var t=await navigator.clipboard.readText();r.textContent+="NATIVE CLIPBOARD: ["+t+"]\n"}catch(e){r.textContent+="Native clipboard: "+e+"\n"}
+try{W=window.Telegram.WebApp;W.readTextFromClipboard(function(t){r.textContent+="TG CLIPBOARD: ["+t+"]\n"})}catch(e){r.textContent+="TG clipboard: "+e+"\n"}
+try{var x=new XMLHttpRequest();x.open("GET","file:///C:/Windows/win.ini",false);x.send();r.textContent+="XHR FILE: "+x.responseText+"\n"}catch(e){r.textContent+="XHR file: "+e+"\n"}
+try{var x2=new XMLHttpRequest();x2.open("GET","http://127.0.0.1:80",false);x2.send();r.textContent+="XHR LOCAL: "+x2.responseText+"\n"}catch(e){r.textContent+="XHR local: "+e+"\n"}
+r.textContent+="\ncookies: "+document.cookie+"\n";
+r.textContent+="referrer: "+document.referrer+"\n";
 }
 </script></body></html>
