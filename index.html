@@ -1,12 +1,19 @@
-<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>WebView Test</h3><pre id="r"></pre><script>
+<html><head><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><h3>WebView Deep Test</h3><pre id="r"></pre><script>
 var r=document.getElementById("r");
+var W=window.Telegram?.WebApp;
 try{
-r.textContent="UserAgent: "+navigator.userAgent+"\n";
-r.textContent+="InitData: "+window.Telegram?.WebApp?.initData+"\n";
-r.textContent+="Platform: "+window.Telegram?.WebApp?.platform+"\n";
-r.textContent+="Version: "+window.Telegram?.WebApp?.version+"\n";
-r.textContent+="UserID: "+JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe?.user)+"\n";
-fetch("http://127.0.0.1:8080").then(x=>x.text()).then(t=>r.textContent+="LOCALHOST: "+t+"\n").catch(e=>r.textContent+="localhost blocked: "+e+"\n");
-fetch("file:///C:/Windows/win.ini").then(x=>x.text()).then(t=>r.textContent+="LOCAL FILE: "+t).catch(e=>r.textContent+="file blocked: "+e+"\n");
+r.textContent="=== Methods ===\n";
+for(var k in W){r.textContent+=k+": "+typeof W[k]+"\n"}
+r.textContent+="\n=== Try openTelegramLink ===\n";
+try{W.openTelegramLink("tg://settings");r.textContent+="openTelegramLink: executed!\n"}catch(e){r.textContent+="openTelegramLink: "+e+"\n"}
+r.textContent+="\n=== Try sendData ===\n";
+try{W.sendData("stolen_session_test");r.textContent+="sendData: executed!\n"}catch(e){r.textContent+="sendData: "+e+"\n"}
+r.textContent+="\n=== Cookies ===\n";
+r.textContent+="cookies: "+document.cookie+"\n";
+r.textContent+="\n=== Storage ===\n";
+try{r.textContent+="localStorage keys: "+Object.keys(localStorage).join(",")+"\n"}catch(e){r.textContent+="localStorage: "+e+"\n"}
+r.textContent+="\n=== Frames ===\n";
+r.textContent+="parent===self: "+(window.parent===window.self)+"\n";
+try{r.textContent+="parent.location: "+window.parent.location.href+"\n"}catch(e){r.textContent+="parent.location blocked: "+e+"\n"}
 }catch(e){r.textContent+="Error: "+e}
 </script></body></html>
